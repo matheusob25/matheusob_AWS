@@ -11,7 +11,7 @@ Atualmente moro em Itapuranga-go e estudo no Instituto Federal Goiano -  Campus 
 Nessa parte da sprint aprendemos sobre como utilizar o software de versionamento git, podendo salvar diferentes versões do código do projeto e analisando cada evolução antes de adicionar a versão final para que não ocorram erros no desenvolvimento de um software, para que o trabalho de uma equipe em um projeto seja facilitado.<br>
 E também utilizamos o Git Hub que é basicamente o banco que guarda e gerencia os repositórios desses projetos.
 
-![linux](https://images.vexels.com/media/users/3/140692/isolated/lists/72d1f12edf758d24f5b6db73bac4f297-logotipo-do-linux.png)
+![linux](https://deltaengine.net/Icons/Platforms/Linux.png?width=224&height=224&scale=both)
 <br>
 Na segunda parte da sprint 1 aprendemos comandos de linux que um desenvolvedor deve conhecer para utilizar esse sistema operacional.
 <br>
