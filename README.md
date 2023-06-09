@@ -9,6 +9,12 @@ Atualmente moro em Itapuranga-go e estudo no Instituto Federal Goiano -  Campus 
 <br>
 Nessa parte da sprint aprendemos sobre como utilizar o software de versionamento git, podendo salvar diferentes versões do código do projeto e analisando cada evolução antes de adicionar a versão final para que não ocorram erros no desenvolvimento de um software, para que o trabalho de uma equipe em um projeto seja facilitado.<br>
 E também utilizamos o Git Hub que é basicamente o banco que guarda e gerencia os repositórios desses projetos.
+<br>
+Alguns comandos básicos de git:
+* git add -- Prepara os arquivos adicionados recentemente para receberem o commit.
+* git commit -- Salva as alterações feitas dentro da branch que o usuário está.
+* git push -- Envia as alterações salvas na branch para o git hub.
+* git pull -- Traz para o repositório local todas as alterações feitas no remoto.
 
 ![linux](https://deltaengine.net/Icons/Platforms/Linux.png?width=224&height=224&scale=both)
 <br>
