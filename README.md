@@ -4,8 +4,7 @@ Atualmente moro em Itapuranga-go e estudo no Instituto Federal Goiano -  Campus 
 <br>
 
 # Sprint 1  
-![git e github](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwXqqBMEmGY8ipst-Qi35NoMyFBsCuuzpVH6Y8ec2bNWurzFEg73sxnVbBpo5oVh_Dg_s&usqp=CAU,)![a](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRV7ZMdH1QA0zTIvy7vWeTLWYQ3afoQbHhL4g&usqp=CAU)
-
+![git e github](https://miro.medium.com/v2/resize:fit:256/0*xzfXdWrkrbDw7cIZ.png) ![a](https://icon-library.com/images/github-icon-png/github-icon-png-29.jpg)
 <br>
 <br>
 Nessa parte da sprint aprendemos sobre como utilizar o software de versionamento git, podendo salvar diferentes versões do código do projeto e analisando cada evolução antes de adicionar a versão final para que não ocorram erros no desenvolvimento de um software, para que o trabalho de uma equipe em um projeto seja facilitado.<br>
