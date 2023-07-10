@@ -1,0 +1,24 @@
+with open('actors.csv') as file:
+      linhas = file.readlines() 
+
+
+for linha in linhas[1:]:
+    valores = []
+    valores_recorrentes = ""
+    aspas = False
+    
+    for char in linha:
+        if char == ',' and not aspas:
+            valores.append(valores_recorrentes.strip('"'))
+            valores_recorrentes = ""
+        else:
+            valores_recorrentes += char
+        
+        if char == '"':
+            aspas = not aspas
+    
+    valores.append(valores_recorrentes.strip('"'))
+    
+    valor_bruto = float(valores[1])
+    numero_filmes = float(valores[2])
+    print('Ator: {} -> média de faturamento por filmes: {:.2f}'.format(valores[0], valor_bruto/numero_filmes))

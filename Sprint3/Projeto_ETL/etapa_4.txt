@@ -1,0 +1,29 @@
+filmes = []
+with open('actors.csv', 'r') as arquivo:
+    next(arquivo)
+
+    for linha in arquivo:
+        valores = []
+        linha = linha.strip().split(',')
+        filme = linha[4]
+        filmes.append(filme)
+        
+
+contagem_filmes = {}
+for filme in filmes:
+    if filme in contagem_filmes:
+        contagem_filmes[filme] += 1
+    else:
+        contagem_filmes[filme] = 1
+
+filmes_repetidos = []
+max_ocorrencias = 0
+for filme, ocorrencias in contagem_filmes.items():
+    if ocorrencias > max_ocorrencias:
+        max_ocorrencias = ocorrencias
+        filmes_repetidos = [filme]
+    elif ocorrencias == max_ocorrencias:
+        filmes_repetidos.append(filme)
+
+for filme in filmes_repetidos:
+    print(f"{filme}: {max_ocorrencias} ocorrências")
