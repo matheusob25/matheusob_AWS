@@ -1,5 +1,6 @@
+# nesse código eu fiz com funções, mas ele não retorna nada na udemy, então na udemy eu fiz sem nenhuma função e funcionou, alguns outros exercícios eu modifiquei também para passar na udemy mas estão bem parecidos
+
 def ler_arquivo_numeros(nome):
-    try:
         with open(nome, 'r') as arquivo:
             linhas = arquivo.readlines()
 
@@ -10,11 +11,6 @@ def ler_arquivo_numeros(nome):
             numeros.extend(numeros_linha)
 
         return numeros
-
-    except FileNotFoundError:
-        print(f"O arquivo '{nome}' não foi encontrado.")
-        return []
-
 
 def filtrando_num(num):
     order = list(filter(lambda x: x % 2 == 0, num))
@@ -32,6 +28,6 @@ if __name__ == "__main__":
     numeros_do_arquivo = ler_arquivo_numeros(arquivo_txt)
     order = filtrando_num(numeros_do_arquivo)
     
-    print('-{}'.format(order))
-    print('-{}'.format(soma(order)))
+    print('{}'.format(order))
+    print('{}'.format(soma(order)))
 
