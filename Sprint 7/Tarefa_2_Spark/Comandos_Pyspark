@@ -1,0 +1,20 @@
+sudo docker pull jupyter/all-spark-notebook
+
+sudo docker run -it -p 8888:8888 jupyter/all-spark-notebook
+
+sudo docker exec -it determined_feynman(nome do container) pyspark
+
+# comandos para ler o readme e calcular a frequência de cada palavra:
+
+- readme = sc.textFile("README.md") 
+
+# eu coloquei a pasta readme dentro da pasta principal do jupyter, para que não precisasse referenciar um caminho dentro do container
+
+- palavras = readme.flatMap(lambda l: l.split(" "))
+
+- contando = palavras.map(lambda p: (p, 1)).reduceByKey(lambda a, b: a + b)
+
+- resultado = contando.collect()
+
+-for pala, cont in resultado:
+    print(f"{pala}: {cont}")
