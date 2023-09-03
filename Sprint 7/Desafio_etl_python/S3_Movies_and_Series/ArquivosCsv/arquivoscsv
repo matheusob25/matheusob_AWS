@@ -1,0 +1,9 @@
+-- Esse documento de texto é somente para explicar que não foi possível fazer um commit com os dois arquivos csv pois eles ultrapassam o limite do git hub de 100mb.
+
+
+-- Para que o run do container da imagem funcione, os arquivos csv precisariam estar no diretório que esse documento de texto se encontra.
+
+
+
+
+
