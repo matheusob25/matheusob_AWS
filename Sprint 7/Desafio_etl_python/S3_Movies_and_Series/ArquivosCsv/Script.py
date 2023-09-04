@@ -1,7 +1,7 @@
 import csv
 import boto3
 
-s3 = boto3.client('s3', region_name='us-east-1',aws_access_key_id='AKIA3AUF5KDIHD2YSJD5', aws_secret_access_key='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')
+s3 = boto3.client('s3', region_name='us-east-1',aws_access_key_id='', aws_secret_access_key='')
 
 bucket = 'moviesandseries025'
 
