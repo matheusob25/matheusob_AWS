@@ -1,0 +1,44 @@
+## Essa é a última transformação em parquet referente a um arquivo csv que eu consegi no keggle
+## Csv (Informações sobre  tempo em minutos, bilheteria, orçamento e oscars dos filmes)
+
+
+import sys
+import os 
+from awsglue.transforms import *
+from awsglue.utils import getResolvedOptions
+from pyspark.context import SparkContext
+from awsglue.context import GlueContext
+from awsglue.job import Job
+from pyspark.sql import SparkSession 
+from pyspark.sql.functions import * 
+
+## @params: [JOB_NAME]
+args = getResolvedOptions(sys.argv, ['JOB_NAME','S3_INPUT_PATH','S3_OUTPUT_PATH'])
+sc = SparkContext()
+glueContext = GlueContext(sc)
+spark = glueContext.spark_session
+job = Job(glueContext)
+job.init(args['JOB_NAME'], args)
+sf = args['S3_INPUT_PATH']
+target_path = args['S3_OUTPUT_PATH']
+
+schema = "Name String, RuntimeInMinutes Int, BudgetInMillions Int, BoxOfficeRevenueInMillions Float, AcademyAwardNominations Int, AcademyAwardWins Int, RottenTomatoesScore Float"
+
+spark_df = spark.read.csv(sf, header=True, schema=schema)
+
+spark_df = spark_df.filter((col("Name") != "The Hobbit Series") & (col("Name") != "The Lord of the Rings Series"))
+
+
+spark_df = spark_df.withColumnRenamed("Name", "nome_filme")
+spark_df = spark_df.withColumnRenamed("RuntimeInMinutes", "duracao_em_minutos")
+spark_df = spark_df.withColumnRenamed("BudgetInMillions", "orcamento_em_milhoes")
+spark_df = spark_df.withColumnRenamed("BoxOfficeRevenueInMillions", "bilheteria_em_milhoes")
+spark_df = spark_df.withColumnRenamed("AcademyAwardNominations", "numero_de_indicacoes_oscar")
+spark_df = spark_df.withColumnRenamed("AcademyAwardWins", "numero_de_vitorias_oscar")
+spark_df = spark_df.withColumnRenamed("RottenTomatoesScore", "pontuacao_no_RottenTomatoes")
+
+spark_df.show()
+
+
+spark_df.write.parquet(target_path, mode="append")
+job.commit()

@@ -1,0 +1,43 @@
+## esse script se refere ao processo de transformação de raw para trusted dos primeiros jsons  que eu trouxe da sprint 8
+## jsons 1 TMDB (informações gerais de cada filme)
+
+import sys
+import os 
+from awsglue.transforms import *
+from awsglue.utils import getResolvedOptions
+from pyspark.context import SparkContext
+from awsglue.context import GlueContext
+from awsglue.job import Job
+from pyspark.sql import SparkSession 
+
+## @params: [JOB_NAME]
+args = getResolvedOptions(sys.argv, ['JOB_NAME','S3_INPUT_PATH1','S3_INPUT_PATH2','S3_INPUT_PATH3','S3_INPUT_PATH4','S3_INPUT_PATH5','S3_INPUT_PATH6','S3_OUTPUT_PATH'])
+sc = SparkContext()
+glueContext = GlueContext(sc)
+spark = glueContext.spark_session
+job = Job(glueContext)
+job.init(args['JOB_NAME'], args)
+sf1 = args['S3_INPUT_PATH1']
+sf2 = args['S3_INPUT_PATH2']
+sf3 = args['S3_INPUT_PATH3']
+sf4 = args['S3_INPUT_PATH4']
+sf5 = args['S3_INPUT_PATH5']
+sf6 = args['S3_INPUT_PATH6']
+target_path = args['S3_OUTPUT_PATH']
+
+spark_df = spark.read.json(sf1)
+
+source_file = [sf2, sf3, sf4, sf5, sf6]
+for s in source_file:
+    df = spark.read.json(f"{s}")
+    spark_df = spark_df.union(df)
+
+spark_df.show()
+spark_df = spark_df.withColumnRenamed('Data de Lancamento', 'data_lancamento')
+spark_df = spark_df.withColumnRenamed('Média de votos:', 'media_votos')
+spark_df = spark_df.withColumnRenamed('Visão geral', 'visao_geral')
+
+spark_df = spark_df.repartition(1)
+
+spark_df.write.parquet(target_path, mode="append")
+job.commit()
