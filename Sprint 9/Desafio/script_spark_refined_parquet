@@ -1,0 +1,104 @@
+## esse foi o tratamento de dados que eu fiz para passar a trusted para a refined.
+## basicamente coloquei ids como chaves primárias e chaves estrangeiras em duas tabelas para a modelagem dimensional
+## também tirei dados de uma tabela e coloquei na tabela fato onde estão os dados quantitativos e qualitativos
+
+
+import sys
+import os 
+from awsglue.transforms import *
+from awsglue.utils import getResolvedOptions
+from pyspark.context import SparkContext
+from awsglue.context import GlueContext
+from awsglue.job import Job
+from pyspark.sql import SparkSession 
+from pyspark.sql.functions import lit, col, expr
+
+
+## @params: [JOB_NAME]
+args = getResolvedOptions(sys.argv, ['JOB_NAME','S3_INPUT_PREMIACOES','S3_INPUT_ELENCO','S3_INPUT_DETALHES','S3_OUTPUT_FATO', 'S3_OUTPUT_DIM_ELENCO', 'S3_OUTPUT_DIM_CARACT'])
+sc = SparkContext()
+glueContext = GlueContext(sc)
+spark = glueContext.spark_session
+job = Job(glueContext)
+job.init(args['JOB_NAME'], args)
+caminho_premios = args['S3_INPUT_PREMIACOES']
+caminho_elenco = args['S3_INPUT_ELENCO']
+caminho_detalhes = args['S3_INPUT_DETALHES']
+
+df1 = spark.read.parquet(caminho_premios)
+df1 = df1.withColumn("id_filme", lit(120))
+part1 = df1.select("*").filter(col("duracao_em_minutos") == 178)
+part1 = part1.withColumn("id_caracteristica", lit(0))
+
+part2 = df1.select("*").filter(col("duracao_em_minutos") == 179)
+part2 = part2.withColumn("id_filme", lit(121))
+part2 = part2.withColumn("id_caracteristica", lit(1))
+
+part3 = df1.select("*").filter(col("duracao_em_minutos") == 201)
+part3 = part3.withColumn("id_filme", lit(122))
+part3 = part3.withColumn("id_caracteristica", lit(2))
+
+part4 = df1.select("*").filter(col("duracao_em_minutos") == 169)
+part4 = part4.withColumn("id_filme", lit(49051))
+part4 = part4.withColumn("id_caracteristica", lit(3))
+
+part5 = df1.select("*").filter(col("duracao_em_minutos") == 161)
+part5 = part5.withColumn("id_filme", lit(57158))
+part5 = part5.withColumn("id_caracteristica", lit(4))
+
+part6 = df1.select("*").filter(col("duracao_em_minutos") == 144)
+part6 = part6.withColumn("id_filme", lit(122917))
+part6 = part6.withColumn("id_caracteristica", lit(5))
+
+juncao = [part2, part3, part4, part5, part6]
+
+for p in juncao:
+    part1 = part1.union(p)
+
+df2 = spark.read.parquet(caminho_detalhes)
+
+p1 = df2.select("*").filter(col("data_lancamento") == "2001-12-18")
+p1 = p1.withColumn("id_caracteristica", lit(0))
+
+p2 = df2.select("*").filter(col("data_lancamento") == "2002-12-18")
+p2 = p2.withColumn("id_caracteristica", lit(1))
+
+p3 = df2.select("*").filter(col("data_lancamento") == "2003-12-01")
+p3 = p3.withColumn("id_caracteristica", lit(2))
+
+p4 = df2.select("*").filter(col("data_lancamento") == "2012-11-26")
+p4 = p4.withColumn("id_caracteristica", lit(3))
+
+p5 = df2.select("*").filter(col("data_lancamento") == "2013-12-11")
+p5 = p5.withColumn("id_caracteristica", lit(4))
+
+p6 = df2.select("*").filter(col("data_lancamento") == "2014-12-10")
+p6 = p6.withColumn("id_caracteristica", lit(5))
+
+j = [p2, p3, p4, p5, p6]
+
+for p in j:
+    p1 = p1.union(p)
+
+p_join = p1.select("media_votos","Popularidade","Votos","id_caracteristica")
+fato = part1.join(p_join, on="id_caracteristica")
+fato = fato.drop("nome_filme")
+
+p1 = p1.withColumn("data_lancamento", col("data_lancamento").cast("date"))
+dim_caract = p1.select("data_lancamento","Titulo","visao_geral", "id_caracteristica")
+
+dim_elenco = spark.read.parquet(caminho_elenco)
+fato.show()
+dim_caract.show()
+dim_elenco.show()
+fato = fato.repartition(1)
+dim_caract = dim_caract.repartition(1)
+
+saida_fato = args['S3_OUTPUT_FATO']
+saida_dim_elenco = args['S3_OUTPUT_DIM_ELENCO']
+saida_dim_caract = args['S3_OUTPUT_DIM_CARACT']
+fato.write.parquet(saida_fato, mode="append")
+dim_caract.write.parquet(saida_dim_caract, mode="append")
+dim_elenco.write.parquet(saida_dim_elenco, mode="append")
+
+job.commit()
