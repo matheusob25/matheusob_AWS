@@ -36,6 +36,8 @@ def lambda_handler(arg, context):
                   'Popularidade': popularidade}
             filme.append(df)
 
+    else:
+        return f'Erro na solicitação: {response.status_code}'
     
     resul = json.dumps(filme)
     caminho = 'Raw/TMDB/Json/2023/09/08/LordOfTheRings1.json'
@@ -45,5 +47,4 @@ def lambda_handler(arg, context):
     except botocore.exceptions.ClientError as e:
         return f'erro ao enviar arquivo:{str(e)} '
     
-    else:
-        return f'Erro na solicitação: {response.status_code}'
+    
